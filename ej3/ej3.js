@@ -21,11 +21,10 @@ app.get('/product', (req, res) => {
 });
 
 /* 
-Crear endpoint para poder eliminar un producto
-Crear filtro por precio de producto
-Crear filtro que muestre los productos con un precio entre 50 y 250.
-Crear un filtro que cuando busque en postman por parámetro el id de un producto me devuelva ese producto
-Crear un filtro que cuando busque en postman por parámetro el nombre de un producto me devuelva ese producto
+
+TODO:Crear filtro que muestre los productos con un precio entre 50 y 250.
+TODO:Crear un filtro que cuando busque en postman por parámetro el id de un producto me devuelva ese producto
+
  */
 
 //Crear endpoint para poder crear un producto nuevo
@@ -42,6 +41,49 @@ app.post('/product', (req, res) => {
     res.status(201).send({ products });
   }
 });
-//Crear endpoint para poder actualizar un producto
 
 //Crear endpoint para poder actualizar un producto
+app.put('/product/id/:id', (req, res) => {
+  //console.log(req.params.id); //comprueba en la consola que se imprime el id pasado en postman localhost:3000/product/id/1
+  const found = products.some(product => product.id == req.params.id); //para saber si existe lo que busco
+  if (found) {
+    products.forEach(product => {
+      if (product.id == req.params.id) {
+        (product.name = req.body.name ? req.body.name : product.name),
+          (product.price = req.body.price ? req.body.price : product.price);
+        res.send(product);
+      }
+    });
+  } else {
+    //si el miembro que buscamos no existe devolvemos 404
+    res.status(404).send({ msg: `Member with id ${req.params.id} not found` });
+  }
+});
+
+//Crear endpoint para poder eliminar un producto
+app.delete('/product/id/:id', (req, res) => {
+  const found = products.some(product => product.id == req.params.id); //para saber si existe lo que busco
+  if (found) {
+    //eliminar un product
+    res.send(products.filter(product => product.id != req.params.id));
+  } else {
+    //si el miembro que buscamos no existe devovlemos un notfound
+    res.status(404).send({ msg: `Product with id ${req.params.id} not found` });
+  }
+});
+
+//TODO:Crear filtro por precio de producto
+
+//Crear un filtro que cuando busque en postman por parámetro el nombre de un producto me devuelva ese producto
+app.get('/product/nme/:name', (req, res) => {
+  const found = products.some(product => product.name == req.params.name); //para saber si existe lo que busco
+  if (found) {
+    //eliminar un product
+    res.send(products.filter(product => product.name != req.params.name));
+  } else {
+    //si el miembro que buscamos no existe devovlemos un notfound
+    res
+      .status(404)
+      .send({ msg: `Product with name ${req.params.name} not found` });
+  }
+});
