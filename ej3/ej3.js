@@ -20,13 +20,6 @@ app.get('/product', (req, res) => {
   res.send({ msg: 'Here you are the products: ', products: members });
 });
 
-/* 
-
-TODO:Crear filtro que muestre los productos con un precio entre 50 y 250.
-TODO:Crear un filtro que cuando busque en postman por parámetro el id de un producto me devuelva ese producto
-
- */
-
 //Crear endpoint para poder crear un producto nuevo
 app.post('/product', (req, res) => {
   const newProduct = {
@@ -72,14 +65,25 @@ app.delete('/product/id/:id', (req, res) => {
   }
 });
 
-//TODO:Crear filtro por precio de producto
+//TODO:mal, Crear filtro por precio de producto
+app.get('/product/price/:price', (req, res) => {
+  const found = products.some(product => product.price == req.params.price); //para saber si existe lo que busco
+  if (found) {
+    res.send(`Product's price ${req.params.price}`);
+  } else {
+    //si el miembro que buscamos no existe devovlemos un notfound
+    res
+      .status(404)
+      .send({ msg: `Product with price ${req.params.price} not found` });
+  }
+});
 
 //Crear un filtro que cuando busque en postman por parámetro el nombre de un producto me devuelva ese producto
-app.get('/product/nme/:name', (req, res) => {
+//TODO:mal,  postman url white spaces %20
+app.get('/product/name/:name', (req, res) => {
   const found = products.some(product => product.name == req.params.name); //para saber si existe lo que busco
   if (found) {
-    //eliminar un product
-    res.send(products.filter(product => product.name != req.params.name));
+    res.send(`Product's name ${req.params.name}`);
   } else {
     //si el miembro que buscamos no existe devovlemos un notfound
     res
@@ -87,3 +91,28 @@ app.get('/product/nme/:name', (req, res) => {
       .send({ msg: `Product with name ${req.params.name} not found` });
   }
 });
+
+//TODO: mal Crear filtro que muestre los productos con un precio entre 50 y 250.
+app.get('/product/price/:price', (req, res) => {
+  const found = products.some(
+    product =>
+      product.price == req.params.price &&
+      req.params.price > 50 &&
+      req.params.price < 250
+  );
+  if (found) {
+    members.forEach(member => {
+      if (member.id == req.params.id) {
+        (member.name = req.body.name ? req.body.name : member.name),
+          (member.price = req.body.price ? req.body.price : member.price);
+        res.send(`Product's price ${req.params.price}`);
+      }
+    });
+  } else {
+    res
+      .status(404)
+      .send({ msg: `Product with price ${req.params.price} not found` });
+  }
+});
+
+//TODO:Crear un filtro que cuando busque en postman por parámetro el id de un producto me devuelva ese producto
