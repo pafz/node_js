@@ -1,0 +1,17 @@
+{
+  "name": "ejercicio_1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "el2.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ej2.js",
+    "dev": "nodemon ej2.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^2.0.22"
+  }
+}
