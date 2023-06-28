@@ -65,48 +65,12 @@ app.delete('/product/id/:id', (req, res) => {
   }
 });
 
-//TODO:mal, Crear filtro por precio de producto
+//Crear filtro por precio de producto
 app.get('/product/price/:price', (req, res) => {
-  const found = products.some(product => product.price == req.params.price); //para saber si existe lo que busco
+  const found = products.some(product => product.price == req.params.price);
   if (found) {
-    res.send(`Product's price ${req.params.price}`);
-  } else {
-    //si el miembro que buscamos no existe devovlemos un notfound
-    res
-      .status(404)
-      .send({ msg: `Product with price ${req.params.price} not found` });
-  }
-});
-
-//Crear un filtro que cuando busque en postman por parámetro el nombre de un producto me devuelva ese producto
-//TODO:mal,  postman url white spaces %20
-app.get('/product/name/:name', (req, res) => {
-  const found = products.some(product => product.name == req.params.name); //para saber si existe lo que busco
-  if (found) {
-    res.send(`Product's name ${req.params.name}`);
-  } else {
-    //si el miembro que buscamos no existe devovlemos un notfound
-    res
-      .status(404)
-      .send({ msg: `Product with name ${req.params.name} not found` });
-  }
-});
-
-//TODO: mal Crear filtro que muestre los productos con un precio entre 50 y 250.
-app.get('/product/price/:price', (req, res) => {
-  const found = products.some(
-    product =>
-      product.price == req.params.price &&
-      req.params.price > 50 &&
-      req.params.price < 250
-  );
-  if (found) {
-    members.forEach(member => {
-      if (member.id == req.params.id) {
-        (member.name = req.body.name ? req.body.name : member.name),
-          (member.price = req.body.price ? req.body.price : member.price);
-        res.send(`Product's price ${req.params.price}`);
-      }
+    products.forEach(product => {
+      res.send(`Product's price ${req.params.price}, name ${product.name}`);
     });
   } else {
     res
@@ -115,4 +79,53 @@ app.get('/product/price/:price', (req, res) => {
   }
 });
 
-//TODO:Crear un filtro que cuando busque en postman por parámetro el id de un producto me devuelva ese producto
+//Crear un filtro que cuando busque en postman por parámetro el nombre de un producto me devuelva ese producto
+//postman url white spaces %20 FIFA%2022%20PS5
+app.get('/product/name/:name', (req, res) => {
+  const found = products.some(product => product.name == req.params.name);
+  if (found) {
+    products.forEach(product => {
+      res.send(
+        `Product's name ${req.params.name}, id ${product.id}, price ${product.price}`
+      );
+    });
+  } else {
+    res
+      .status(404)
+      .send({ msg: `Product with name ${req.params.name} not found` });
+  }
+});
+
+//TODO:mal Crear filtro que muestre los productos con un precio entre 50 y 250.
+//path changed
+app.get('/product/price-filter', (req, res) => {
+  //const found = products.some(product => product.price == req.params.price);
+  //   if (found) {
+  products.forEach(product => {
+    if (product.price > 50 && product.price > 250) {
+      res.send(
+        `Product's price ${req.params.price}, name ${product.name}, id ${roduct.id}`
+      );
+    }
+  });
+  //   } else {
+  //     res
+  //       .status(404)
+  //       .send({ msg: `Product with price ${req.params.price} not found` });
+  //   }
+});
+
+//Crear un filtro que cuando busque en postman por parámetro el id de un producto me devuelva ese producto
+//path changed
+app.get('/product-filter/id/:id', (req, res) => {
+  const found = products.some(product => product.id == req.params.id);
+  if (found) {
+    products.forEach(product => {
+      res.send(
+        `Product's id ${req.params.id}, name ${product.name}, price ${product.price}`
+      );
+    });
+  } else {
+    res.status(404).send({ msg: `Product with id ${req.params.id} not found` });
+  }
+});
