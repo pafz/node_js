@@ -33,3 +33,18 @@ app.delete('/products', (req, res) => {
 app.get('/users', (req, res) => {
   res.send(`user's list`);
 });
+
+//Usuarios, Método: post, Acción: Mostrar un mensaje que diga: crear un usuario
+app.post('/users', (req, res) => {
+  res.send('create an user');
+});
+
+//Usuarios, Metodo: put, Acción: Mostrar un mensaje que diga: actualizar un usuario
+app.put('/users', (req, res) => {
+  res.send('update an user');
+});
+
+//Usuarios, Metodo: delete, Acción: Mostrar un mensaje que diga: borrar un usuario
+app.delete('/users', (req, res) => {
+  res.send('delete an user');
+});
